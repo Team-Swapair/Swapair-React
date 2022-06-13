@@ -11,6 +11,7 @@ const NavBarElements = () => {
       <Nav.Link href="/Profile">Profile</Nav.Link>
       <Nav.Link href="/Alert">Alert</Nav.Link>
           <Nav.Link href="/Signup">Signup</Nav.Link>
+          <Nav.Link href="/Signin">Signin</Nav.Link>
     </Nav>
     </Container>
   </Navbar>
