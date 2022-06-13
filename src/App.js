@@ -6,6 +6,7 @@ import Alert from './screens/Alert';
 import Signup from './screens/Signup';
 import NavBarElements from './components/NavBarElements';
 import Signin from './screens/Signin';
+import Post from './screens/Post';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/Profile" element={<Profile />} />
         <Route path="/Alert" element={<Alert />} />
+        <Route path="/Post" element={<Post />} />
         <Route path="/Signup" element={<Signup />} />
         <Route path="/Signin" element={<Signin />} />
       </Routes>
