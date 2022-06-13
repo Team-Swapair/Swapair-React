@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 
 const NavBarElements = () => {
@@ -10,10 +10,11 @@ const NavBarElements = () => {
       <Nav.Link href="/">Home</Nav.Link>
       <Nav.Link href="/Profile">Profile</Nav.Link>
       <Nav.Link href="/Alert">Alert</Nav.Link>
+          <Nav.Link href="/Signup">Signup</Nav.Link>
     </Nav>
     </Container>
   </Navbar>
   );
-}
+};
 
-export default NavBarElements
+export default NavBarElements;
