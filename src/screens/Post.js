@@ -1,104 +1,83 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
+import {Col, Row, Container, Image, Badge, Card} from 'react-bootstrap'
+import axios from 'axios';
+import '../assets/card1.css'
+import { useParams } from 'react-router-dom';
 
 function Post() {
+
+  const [data, setData] = useState([]);
+  const [haveList, setHaveList] = useState([]);
+  const [wantList, setWantList] = useState([]);
+
+  let {no} = useParams();
+
+  console.log("id is ",{no});
+
+  useEffect(()=>{
+    const id  = no.no;
+    axios.get('http://localhost:8080/v1/post/'+no)
+    .then(res =>{
+        setData(res.data);
+        })
+    .catch(err => console.log(err))
+  },[]);
+
+  console.log("list is", data.haveGoodsList )
+  
   return (
-    <StyledPost>
-      <StyledPostContainer>
-        <StyledPostCategory>포켓몬</StyledPostCategory>
-        <StyledPostGoodsContainer>
-          <StyledPostHaveGoods>
-            <StyledPostGoods>
-              <StyledPostGoodsHeader>HAVE</StyledPostGoodsHeader>
-              <StyledPostGoodsImageWrapper>
-                <StyledPostGoodsImage />
-                <StyledPostGoodsImage />
-                <StyledPostGoodsImage />
-              </StyledPostGoodsImageWrapper>
-              <StyledPostGoodsName>파이리</StyledPostGoodsName>
-            </StyledPostGoods>
-          </StyledPostHaveGoods>
-          <StyledPostWantGoods>
-            <StyledPostGoods>
-              <StyledPostGoodsHeader>WANT</StyledPostGoodsHeader>
-              <StyledPostGoodsImageWrapper>
-                <StyledPostGoodsImage />
-                <StyledPostGoodsImage />
-                <StyledPostGoodsImage />
-              </StyledPostGoodsImageWrapper>
-              <StyledPostGoodsName>별가사리</StyledPostGoodsName>
-            </StyledPostGoods>
-          </StyledPostWantGoods>
-        </StyledPostGoodsContainer>
-        <StyledPostContent>
-          <div>제목</div>
-          <div>포켓몬 띠뿌띠뿌씰 교환~</div>
-          <div>내용</div>
-          <div>파이리어쩌구</div>
-          <div>다른 물품 제시해도 괜찮아요</div>
-        </StyledPostContent>
-      </StyledPostContainer>
-    </StyledPost>
+    <Container className='m-5 justify-content-center'>
+          <Card border="secondary">
+            <Card.Header>
+              <Container >
+                <h4><Badge className='mb-2' bg="secondary">있어요</Badge></h4>
+                <Row className='justify-content-center mb-2'>
+                  <Col xs={8}>
+                    <Image rounded="true" id='card-img' height={'300rem'} src={data.haveImage} />
+                  </Col>
+                </Row>
+                <Row >
+                  {
+                    data.haveGoodsList && data.haveGoodsList.map((goods) => {
+                      return (
+                        <div>
+                          {goods.goodsName}
+                        </div>
+                      )
+                    })
+                  }
+                </Row>
+              </Container>
+              <Container className='mt-5'>
+                <h4><Badge className='mb-2' bg="secondary">구해요</Badge></h4>
+                <Row className='justify-content-center mb-2' >
+                  <Col xs={8}>
+                    <Image rounded="true" id='card-img' height={'300rem'} src={data.wantImage} />
+                  </Col>
+                </Row>
+                <Row>
+                  {
+                    data.wantGoodsList && data.wantGoodsList.map((goods) => {
+                      return (
+                        <div >
+                          {goods.goodsName}
+                        </div>
+                      )
+                    })
+                  }
+                </Row>
+              </Container>
+            </Card.Header>
+            <Card.Body>
+              <Container>
+                <h5 ><Row >{data.postTitle}</Row></h5>
+                <Row className='mt-3'>{data.postContent}</Row>
+              </Container>
+            </Card.Body>
+          </Card>
+    </Container>
   );
 }
 
 export default Post;
-
-const StyledPost = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-`;
-
-const StyledPostContainer = styled.div`
-  width: 80%;
-  height: 80%;
-  border: 1px solid black;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const StyledPostCategory = styled.div`
-  position: absolute;
-  left: 50px;
-  top: 50px;
-  background-color: dodgerblue;
-`;
-
-const StyledPostGoodsContainer = styled.div`
-  width: 50%;
-`;
-
-const StyledPostHaveGoods = styled.div``;
-
-const StyledPostWantGoods = styled.div``;
-
-const StyledPostGoods = styled.div``;
-
-const StyledPostGoodsHeader = styled.div``;
-
-const StyledPostGoodsImageWrapper = styled.div`
-  display: flex;
-`;
-
-const StyledPostGoodsImage = styled.img`
-  width: 100px;
-  height: 100px;
-  margin-right: 10px;
-  background-color: lime;
-`;
-const StyledPostGoodsName = styled.div``;
-
-const StyledPostContent = styled.div`
-  width: 50%;
-  border: 1px solid black;
-  margin-top: 20px;
-  & > div:last-child {
-    margin-top: 20px;
-  }
-`;
