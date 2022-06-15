@@ -1,0 +1,11 @@
+#txt-line{
+      width:50px;
+      padding:0 1px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+}
+
+#card-img{
+    object-fit: cover;
+}

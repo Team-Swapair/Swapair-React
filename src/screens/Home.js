@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Container, Row, Col, Card, Form, Button, Dropdown, InputGroup, DropdownButton, FormGroup } from 'react-bootstrap'
 import PostCard from '../components/PostCard'
+import '../assets/card1.css'
 
 const Home = () => {
 
@@ -11,8 +12,12 @@ const Home = () => {
   const [category, setCategory] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [data, setData] = useState([]);
+  const [haveList, setHaveList] = useState("");
+  const [wantList, setWantList] = useState("");
 
   const handleChange = ({ target: { value } }) => setKeyword(value);
+  const handleCategory = (e)=>{setCategory(e.target.value);};
+  const handleFilter = (e)=>{setFilter(e.target.value);};
 
   const handleSubmit = async (event) =>{
     console.log("keyword is", keyword);
@@ -41,29 +46,29 @@ const Home = () => {
         <Form onSubmit={handleSubmit}>
           <FormGroup>
             <InputGroup >
-              <DropdownButton
+              <select
                 variant="outline-secondary"
                 title="카테고리"
                 id="input-group-dropdown-3"
-                onSelect={(eventKey) => setCategory(eventKey)}
+                onChange={handleCategory}
               >
-                <Dropdown.Item eventKey={null} >전체</Dropdown.Item>
-                <Dropdown.Item eventKey="3" >아이돌</Dropdown.Item>
-                <Dropdown.Item eventKey="2" >포켓몬</Dropdown.Item>
-                <Dropdown.Item eventKey="1" >LP</Dropdown.Item>
-              </DropdownButton>
+                <option value="0" >전체</option>
+                <option value="3" >아이돌</option>
+                <option value="2" >포켓몬</option>
+                <option value="1" >LP</option>
+              </select>
               <Form.Control value={keyword} onChange={handleChange} placeholder="검색어를 입력하시오" />
-              <DropdownButton
+              <select
                 variant="outline-secondary"
                 title="전체"
                 id="input-group-dropdown-4"
                 align="end"
-                onSelect={(eventKey) => setFilter(eventKey)}
+                onChange={handleFilter}
               >
-                <Dropdown.Item eventKey="BOTH" >전체</Dropdown.Item>
-                <Dropdown.Item eventKey="WANT" >구해요</Dropdown.Item>
-                <Dropdown.Item eventKey="HAVE" >있어요</Dropdown.Item>
-              </DropdownButton>
+                <option value="BOTH" >전체</option>
+                <option value="WANT" >구해요</option>
+                <option value="HAVE" >있어요</option>
+              </select>
               <Button className='' variant="secondary" type="submit" disabled={disabled}>
                 검색
               </Button>
@@ -73,19 +78,42 @@ const Home = () => {
         
       </div>
       
-      <Container>
-        <Row xs={1} md = {2} lg ={3} className="justify-content-center mt-5" >
+      <Container >
+        <Row xs={1} md = {2} xl={3} className="justify-content-center mt-5" >
           {
-            data.map( item=>{
+            data.map( (item)=>{
               return(
                 <Col>
-                  <Card className='m-2' style={{ width: '18rem', height: '26rem' }} bg={'secondary'} text={'white'} >
-                    <Card.Img height={'250rem'} variant="top" src={item.haveImage} />
+                  <Card className='m-2' style={{ width: '26rem', height: '26rem' }} bg={'secondary'} text={'white'} >
+                    <Card.Img id='card-img' height={'290rem'} variant="top" src={item.haveImage} />
                     <Card.Body>
                       <Card.Title>{item.postTitle}</Card.Title>
-                      <Card.Text>
-                        {item.postTitle}
-                      </Card.Text>
+                      <Container>
+                        <Row>
+                          <Col xs={3}> 있어요 </Col>
+                          {
+                            item.haveGoodsList.map(goods => {
+                              return (
+                                <Col id='txt-line' sm>
+                                  {goods.goodsName}
+                                </Col>
+                              )
+                            })
+                          }
+                        </Row>
+                        <Row>
+                          <Col xs={3}> 구해요 </Col>
+                          {
+                            item.wantGoodsList.map(goods => {
+                              return (
+                                <Col id='txt-line' sm>
+                                  {goods.goodsName}
+                                </Col>
+                              )
+                            })
+                          }
+                        </Row>
+                      </Container>
                     </Card.Body>
                   </Card>
                 </Col>
