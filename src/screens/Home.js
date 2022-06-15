@@ -2,18 +2,16 @@ import { keyboard } from '@testing-library/user-event/dist/keyboard';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Container, Row, Col, Card, Form, Button, Dropdown, InputGroup, DropdownButton, FormGroup } from 'react-bootstrap'
-import PostCard from '../components/PostCard'
 import '../assets/card1.css'
+import { Link } from 'react-router-dom';
 
-const Home = () => {
+const Home = ()=> {
 
   const [keyword, setKeyword] = useState("");
   const [filter, setFilter] = useState("BOTH");
   const [category, setCategory] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [data, setData] = useState([]);
-  const [haveList, setHaveList] = useState("");
-  const [wantList, setWantList] = useState("");
 
   const handleChange = ({ target: { value } }) => setKeyword(value);
   const handleCategory = (e)=>{setCategory(e.target.value);};
@@ -85,6 +83,7 @@ const Home = () => {
               return(
                 <Col>
                   <Card className='m-2' style={{ width: '26rem', height: '26rem' }} bg={'secondary'} text={'white'} >
+                  <Link to={`/postView/${item.postId}`} style={{ textDecoration: 'none', color:'white' }}>
                     <Card.Img id='card-img' height={'290rem'} variant="top" src={item.haveImage} />
                     <Card.Body>
                       <Card.Title>{item.postTitle}</Card.Title>
@@ -115,6 +114,7 @@ const Home = () => {
                         </Row>
                       </Container>
                     </Card.Body>
+                    </Link>
                   </Card>
                 </Col>
               )
