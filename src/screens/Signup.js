@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Signup() {
   let duplicateEmail;
@@ -27,7 +27,10 @@ function Signup() {
   const onSubmitHandler = async (event) => {
     event.preventDefault();
 
-    if (!email || !password || !phoneNumber) {
+    // if (!email || !password || !phoneNumber) {
+    //   alert('빈칸이 존재합니다. 모든 항목을 채워주세요');
+    // }
+    if (!email || !password) {
       alert('빈칸이 존재합니다. 모든 항목을 채워주세요');
     } else {
       let { data } = await axios.get(
@@ -36,19 +39,28 @@ function Signup() {
 
       duplicateEmail = data;
 
-      data = await axios.get(
-        `http://localhost:8080/v1/user/duplicate/phoneNumber/${phoneNumber}`
-      );
-      duplicatePhoneNumber = data.data;
+      // data = await axios.get(
+      //   `http://localhost:8080/v1/user/duplicate/phoneNumber/${phoneNumber}`
+      // );
+      // duplicatePhoneNumber = data.data;
     }
 
     if (duplicateEmail === true)
       alert('중복된 이메일 입니다. 다시 입력해주세요');
 
-    if (duplicatePhoneNumber === true)
-      alert('이미 존재하는 핸드폰 번호입니다. 다시 입력해주세요');
+    // if (duplicatePhoneNumber === true)
+    //   alert('이미 존재하는 핸드폰 번호입니다. 다시 입력해주세요');
 
-    if (duplicateEmail === false && duplicatePhoneNumber === false) {
+    // if (duplicateEmail === false && duplicatePhoneNumber === false) {
+    //   await axios.post('http://localhost:8080/v1/user', {
+    //     email: email,
+    //     password: password,
+    //     phoneNumber: phoneNumber,
+    //   });
+    //   navigate('/Signin');
+    // }
+
+    if (duplicateEmail === false) {
       await axios.post('http://localhost:8080/v1/user', {
         email: email,
         password: password,
@@ -87,14 +99,18 @@ function Signup() {
         <SignupContainer>
           <SignupHeader>PhoneNumber</SignupHeader>
           <SignupPhoneNumberWrapper>
-            <SignupInput
+            {/* <SignupInput
               Email="핸드폰번호"
               type="text"
               placeholder="010-1111-2222"
               value={phoneNumber}
               onChange={onPhoneNumberHandler}
-            />
-            <SignupPhoneNumberBtn>인증하기</SignupPhoneNumberBtn>
+            /> */}
+            <Link to="/PhoneSignUp">
+              <SignupPhoneNumberBtn type="submit">
+                인증하기
+              </SignupPhoneNumberBtn>
+            </Link>
           </SignupPhoneNumberWrapper>
           <button type="submit">Signup</button>
         </SignupContainer>
@@ -148,10 +164,9 @@ const SignupPhoneNumberWrapper = styled.div`
 `;
 
 const SignupPhoneNumberBtn = styled.button`
-  position: absolute;
-  width: 100px;
-  top: 50%;
-  left: 100%;
-  margin-left: 20px;
-  transform: translateY(-50%);
+  width: 300px;
+  height: 40px;
+  padding-left: 10px;
+  margin-bottom: 20px;
+  margin-top: 10px;
 `;
