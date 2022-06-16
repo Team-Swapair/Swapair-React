@@ -18,12 +18,13 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/Profile" element={<Profile />} />
         <Route path="/Alert" element={<Alert />} />
-        <Route path="/Post" element={<Post />} />
+        <Route path="/PostView/:no" element={<Post />} component={Post} />
         <Route path="/Signup" element={<Signup />} />
         <Route path="/Signin" element={<Signin />} />
         <Route path="/PhoneSignUp" element={<PhoneSignUp />} />
       </Routes>
     </Router>
+
   );
 }
 export default App;
