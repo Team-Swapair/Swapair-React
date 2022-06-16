@@ -1,14 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 function Profile() {
+  let userId = 1;
+  const [userData, setUserData] = useState('');
+  const [userFeedData, setUserFeedData] = useState([]);
+  const [feedId, setFeedId] = useState('');
+
+  const getUser = async () => {
+    const { data } = await axios.get(`http://localhost:8080/v1/user/${userId}`);
+    setUserData(data);
+  };
+
+  const getUserFeed = async () => {
+    const { data } = await axios.get(
+      `http://localhost:8080/v1/user/${userId}/posts`
+    );
+    setUserFeedData(data);
+  };
+  console.log(userFeedData);
+
+  useEffect(() => {
+    getUser();
+    getUserFeed();
+  }, []);
+
   return (
     <StyledProfile>
       <StyledProfileContainer>
         <StyledUserInfo>
           <StyledProfileImage />
           <StyledUserId>
-            <span>아이디: </span> seyon11@gmail.com
+            <span>Email: </span> {userData.email}
           </StyledUserId>
         </StyledUserInfo>
         <StyledFeedList>
@@ -17,11 +42,14 @@ function Profile() {
             <StyledFeedBlock>Title</StyledFeedBlock>
             <StyledFeedBlock>Category</StyledFeedBlock>
           </StyledFeedHeader>
-          <StyledFeedBody>
-            <StyledFeedBlock>1</StyledFeedBlock>
-            <StyledFeedBlock>LP판 교환 원해요~</StyledFeedBlock>
-            <StyledFeedBlock>LP</StyledFeedBlock>
-          </StyledFeedBody>
+          {console.log(userFeedData)}
+          {userFeedData.map(({ postId, postTitle, postCategory }, i) => (
+            <StyledFeedBody key={postId}>
+              <StyledFeedBlock>{i + 1}</StyledFeedBlock>
+              <StyledFeedBlock>{postTitle}</StyledFeedBlock>
+              <StyledFeedBlock>{postCategory}</StyledFeedBlock>
+            </StyledFeedBody>
+          ))}
         </StyledFeedList>
       </StyledProfileContainer>
     </StyledProfile>
