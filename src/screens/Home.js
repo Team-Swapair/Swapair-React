@@ -17,7 +17,7 @@ const Home = ()=> {
   const handleCategory = (e)=>{setCategory(e.target.value);};
   const handleFilter = (e)=>{setFilter(e.target.value);};
 
-  const handleSubmit = async (event) =>{
+  const handleSubmit = (event) =>{
     console.log("keyword is", keyword);
     console.log("filter is", filter);
     console.log("category is", category);
