@@ -9,6 +9,7 @@ import NavBarElements from './components/NavBarElements';
 import Signin from './screens/Signin';
 import Post from './screens/Post';
 import PhoneSignUp from './screens/PhoneSignUp';
+import PostWrite from './screens/Postwrite';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/Signup" element={<Signup />} />
         <Route path="/Signin" element={<Signin />} />
         <Route path="/PhoneSignUp" element={<PhoneSignUp />} />
+        <Route path="/PostWrite" element={<PostWrite />} />
       </Routes>
     </Router>
   );

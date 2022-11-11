@@ -8,7 +8,7 @@ const NavBarElements = () => {
         <Navbar.Brand href="/">Swapair</Navbar.Brand>
         <Nav className="me-auto">
           <Nav.Link href="/">Home</Nav.Link>
-          <Nav.Link href="/Post">Post</Nav.Link>
+          <Nav.Link href="/PostWrite">Post</Nav.Link>
           <Nav.Link href="/Profile">Profile</Nav.Link>
           <Nav.Link href="/Alert">Alert</Nav.Link>
           <Nav.Link href="/Signup">Signup</Nav.Link>
