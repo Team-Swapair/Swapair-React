@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Button, Form } from 'react-bootstrap';
 
 function Signin() {
   let userId;
@@ -35,29 +36,41 @@ function Signin() {
   return (
     <SigninFull>
       <SigninText>
-        <h3>SignIn</h3>
+        <h3>로그인</h3>
       </SigninText>
       <form onSubmit={onSubmitHandler}>
         <SigninContainer>
-          <SigninHeader>Email</SigninHeader>
-          <SigninInput
-            name="email"
-            type="email"
-            placeholder="swapair123@gmail.com"
-            value={email}
-            onChange={onEmailHandler}
-          />
+          <SigninInput>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>이메일</Form.Label>
+              <Form.Control
+                name="email"
+                type="email"
+                placeholder="swapair123@gmail.com"
+                value={email}
+                onChange={onEmailHandler}
+              />
+            </Form.Group>
+          </SigninInput>
         </SigninContainer>
         <SigninContainer>
-          <SigninHeader>Password </SigninHeader>
-          <SigninInput
-            name="password"
-            type="password"
-            placeholder="@swapair123"
-            value={password}
-            onChange={onPasswordHandler}
-          />
-          <button type="submit">signin</button>
+          <SigninInput>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>비밀번호</Form.Label>
+              <Form.Control
+                name="password"
+                type="password"
+                placeholder="@swapair123"
+                value={password}
+                onChange={onPasswordHandler}
+              />
+            </Form.Group>
+          </SigninInput>
+          <SigninBtn>
+            <div className="d-grid gap-2">
+              <Button type="submit"> 로그인 </Button>
+            </div>
+          </SigninBtn>
         </SigninContainer>
       </form>
     </SigninFull>
@@ -88,16 +101,18 @@ const SigninContainer = styled.div`
   flex-direction: column;
 `;
 
-const SigninHeader = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-`;
-
-const SigninInput = styled.input`
+const SigninInput = styled.div`
   width: 300px;
   height: 50px;
   padding-left: 10px;
   margin-bottom: 20px;
   margin-top: 10px;
+`;
+
+const SigninBtn = styled.div`
+  width: 300px;
+  height: 50px;
+  padding-left: 10px;
+  margin-bottom: 20px;
+  margin-top: 20px;
 `;

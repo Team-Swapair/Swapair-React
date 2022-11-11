@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Form, Alert } from 'react-bootstrap';
-import { Button } from 'react-bootstrap';
-import PhoneInput from 'react-phone-number-input/input';
+import { useNavigate } from 'react-router-dom';
+import { Form, Alert, Button } from 'react-bootstrap';
+import PhoneInput from 'react-phone-number-input';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import styled from 'styled-components';
 import { auth } from '../firebase';
 
 const PhoneSignUp = () => {
@@ -12,7 +12,6 @@ const PhoneSignUp = () => {
   const [flag, setFlag] = useState(false);
   const [otp, setOtp] = useState('');
   const [result, setResult] = useState('');
-  const [successPhone, setSuccessPhone] = useState(false);
   const navigate = useNavigate();
 
   const setupRecaptcha = (number) => {
@@ -27,10 +26,9 @@ const PhoneSignUp = () => {
 
   const getOtp = async (e) => {
     e.preventDefault();
-    console.log(number);
     setError('');
     if (number === '' || number === undefined)
-      return setError('Please enter a valid phone number!');
+      return setError('유효한 핸드폰 번호를 입력하세요');
     try {
       const response = await setupRecaptcha(number);
       setResult(response);
@@ -46,36 +44,41 @@ const PhoneSignUp = () => {
     if (otp === '' || otp === null) return;
     try {
       await result.confirm(otp);
-      navigate('/SignUp');
-      setSuccessPhone = true;
-      console.log(successPhone);
+      navigate('/SignUp', { state: number });
     } catch (err) {
       setError(err.message);
     }
   };
 
+  const goBack = async (e) => {
+    navigate(-1);
+  };
+
   return (
-    <>
-      <div className="p-4 box">
-        <h2 className="mb-3">Firebase Phone Auth</h2>
+    <div className="auto">
+      <PhoneSignUpFull>
+        <h5>번호인증</h5>
         {error && <Alert variant="danger">{error}</Alert>}
+
         <Form onSubmit={getOtp} style={{ display: !flag ? 'block' : 'none' }}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
+            &nbsp;
             <PhoneInput
               defaultCountry="KR"
               value={number}
               onChange={setNumber}
-              placeholder="Enter Phone Number"
+              placeholder="010-1111-2222"
             />
             <div id="recaptcha-container"></div>
           </Form.Group>
+
           <div className="button-right">
-            <Link to="/SignUp">
-              <Button variant="secondary">Cancel</Button>
-            </Link>
+            <Button variant="secondary" onClick={goBack}>
+              취소
+            </Button>
             &nbsp;
             <Button type="submit" variant="primary">
-              Send Otp
+              제출
             </Button>
           </div>
         </Form>
@@ -84,23 +87,31 @@ const PhoneSignUp = () => {
           <Form.Group className="mb-3" controlId="formBasicOtp">
             <Form.Control
               type="otp"
-              placeholder="Enter OTP"
+              placeholder="인증번호"
               onChange={(e) => setOtp(e.target.value)}
             />
           </Form.Group>
           <div className="button-right">
-            <Link to="/">
-              <Button variant="secondary">Cancel</Button>
-            </Link>
+            <Button variant="secondary" onClick={goBack}>
+              취소
+            </Button>
             &nbsp;
             <Button type="submit" variant="primary">
-              Verify
+              인증
             </Button>
           </div>
         </Form>
-      </div>
-    </>
+      </PhoneSignUpFull>
+    </div>
   );
 };
 
 export default PhoneSignUp;
+
+const PhoneSignUpFull = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+`;

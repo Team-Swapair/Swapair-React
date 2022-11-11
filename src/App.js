@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './screens/Home';
 import Profile from './screens/Profile';
@@ -26,7 +26,6 @@ function App() {
         <Route path="/PostWrite" element={<PostWrite />} />
       </Routes>
     </Router>
-
   );
 }
 export default App;

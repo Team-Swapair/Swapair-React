@@ -1,9 +1,9 @@
 import React from 'react';
-import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
+import { Navbar, Container, Nav } from 'react-bootstrap';
 
 const NavBarElements = () => {
   return (
-    <Navbar bg="dark" variant="dark">
+    <Navbar variant="light">
       <Container>
         <Navbar.Brand href="/">Swapair</Navbar.Brand>
         <Nav className="me-auto">
