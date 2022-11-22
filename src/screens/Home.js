@@ -17,6 +17,9 @@ const Home = ()=> {
   const handleCategory = (e)=>{setCategory(e.target.value);};
   const handleFilter = (e)=>{setFilter(e.target.value);};
 
+  let userId = sessionStorage.getItem('userId');
+  console.log("userId"+userId);
+
   const handleSubmit = (event) =>{
     console.log("keyword is", keyword);
     console.log("filter is", filter);

@@ -78,6 +78,7 @@ const Postwrite = () => {
     axios
       .post('http://localhost:8080/v1/post/postwrite', {
         postTitle: postTitle,
+        userId : sessionStorage.getItem('userId'),
         postContent: postContent,
         postCategory: category,
         wantImage: wantImg[0],

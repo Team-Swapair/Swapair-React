@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 function Profile() {
-  let userId = 1;
+  let userId = sessionStorage.getItem('userId');
   const [userData, setUserData] = useState('');
   const [userFeedData, setUserFeedData] = useState([]);
   const [feedId, setFeedId] = useState('');
