@@ -24,13 +24,21 @@ function Signin() {
     const { data } = await axios.post('http://localhost:8080/v1/user/login', {
       email: email,
       password: password,
-    });
+    }).then((response)=>{
+       /// token이 필요한 API 요청 시 header Authorization에 token 담아서 보내기
+      //  console.log(response.headers);
 
-    userId = data;
+      // let jwtToken =  response.headers;
+      sessionStorage.setItem("userId",response.data);
+      userId = response.data;
+      console.log("hmm"+userId);
     authenticated = userId !== -1 ? true : false;
 
-    if (authenticated) navigate('/');
+    if (authenticated) navigate('/Profile');
     else alert('해당 유저 없음');
+      return response.data;
+    }
+    );
   };
 
   return (
