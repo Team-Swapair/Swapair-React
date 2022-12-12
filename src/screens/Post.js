@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
-import {Col, Row, Container, Image, Badge, Card} from 'react-bootstrap'
+import {Col, Row, Container, Image, Badge, Card, Button} from 'react-bootstrap'
 import axios from 'axios';
 import '../assets/card1.css'
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 function Post() {
 
@@ -76,6 +76,9 @@ function Post() {
               </Container>
             </Card.Body>
           </Card>
+          <Link to ={`/chat/${no}`}>
+            <Button className='mt-3'>거래 채팅하기</Button>
+          </Link>  
     </Container>
   );
 }

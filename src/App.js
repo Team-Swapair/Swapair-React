@@ -10,6 +10,7 @@ import Signin from './screens/Signin';
 import Post from './screens/Post';
 import PhoneSignUp from './screens/PhoneSignUp';
 import PostWrite from './screens/Postwrite';
+import Chat from './screens/Chat';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/Signin" element={<Signin />} />
         <Route path="/PhoneSignUp" element={<PhoneSignUp />} />
         <Route path="/PostWrite" element={<PostWrite />} />
+        <Route path="/Chat/:no" element={<Chat />} component={Chat} />
       </Routes>
     </Router>
   );
