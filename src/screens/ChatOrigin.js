@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import * as StompJs from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
 import axios from 'axios';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import { Badge, Card, Container, Stack, Image, Row, Col } from "react-bootstrap";
 
 const ROOM_SEQ = 1;
@@ -17,11 +17,12 @@ const App = () => {
 
   
   let {no} = useParams();
-  
+  const history = useLocation();
 
   useEffect(() => {
     connect();
-    axios.get('http://localhost:8080/v1/post/'+no)
+    console.log(history)
+    axios.get('http://localhost:8080/v1/post/'+history.state.postId)
     .then(res =>{
         setPost(res.data);
         })
@@ -45,11 +46,10 @@ const App = () => {
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
       onConnect: () => {
-        axios.get('http://localhost:8080/v1/chatroom/createroom/'+no)
+        axios.get('http://localhost:8080/v1/chatroom/message/'+no)
     .then(res =>{
-          setRoom(res.data);
-          console.log("room is "+ room);
-          subscribe(res.data);
+        setChatMessages(res.data);
+          subscribe();
           })
     .catch(err => console.log(err))
       },
@@ -65,8 +65,8 @@ const App = () => {
     client.current.deactivate();
   };
 
-  const subscribe = (rnum) => {
-    client.current.subscribe(`/sub/chat/${rnum}`, ({ body }) => {
+  const subscribe = () => {
+    client.current.subscribe(`/sub/chat/${no}`, ({ body }) => {
         setChatMessages((_chatMessages) => [..._chatMessages, JSON.parse(body)]);
       });
   };
@@ -78,7 +78,7 @@ const App = () => {
     // console.log("sender is"+user);
     client.current.publish({
       destination: "/pub/chat",
-      body: JSON.stringify({ roomSeq: room, sender: user, message }),
+      body: JSON.stringify({ roomSeq: no, sender: user, message }),
     });
     
     setMessage("");
@@ -128,6 +128,7 @@ const App = () => {
                           </Row>
                       </Container>
                       </Col>
+                      
                     );
                   })}
               </Row>
