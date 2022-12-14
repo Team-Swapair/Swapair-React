@@ -37,7 +37,6 @@ const Postwrite = () => {
 
     axios.get('http://localhost:8080/v1/post/images')
     .then(res =>{
-      console.log(res.data)
         setFileRoutes(res.data);
         })
     .catch(err => console.log(err))
@@ -52,7 +51,6 @@ const Postwrite = () => {
       },
     };
 
-    console.log(formdata);
     console.log('originImage', originImg);
 
     axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
@@ -73,6 +71,41 @@ const Postwrite = () => {
   };
 
   const handleSubmit = async (event) => {
+    event.preventDefault();
+    writepost();
+
+    // const formdata = new FormData();
+    // formdata.append('haveImg', haveImg);
+    // const config = {
+    //   Headers: {
+    //     'content-type': 'multipart/form-data',
+    //   },
+    // };
+
+    // console.log('originImage', originImg);
+
+    // // axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
+
+    
+
+    // await axios
+    //   .post('http://localhost:5000/imageCompare', formdata, config, {})
+    //   .then((res) => {
+    //     console.log("whyhyyyhyhhwhywhywhywhyhwhwyhwy");
+    //     console.log("result is"+res.data.result);
+    //     if(res.data.result){
+    //       writepost();
+    //     }else{
+    //       alert("중복된 이미지가 존재합니다.")
+    //     }
+    //   })
+    //   .catch((err) => console.log(err));
+
+      
+
+  };
+
+  const writepost = (e) => {
     const wantIds = [];
     for (let i = 0; i < wantGoods.length; i += 1) {
       const id = wantGoods[i].goodsId;
@@ -84,54 +117,23 @@ const Postwrite = () => {
     console.log('havegoods is', haveGoods);
     console.log('wantgoods is', wantGoods);
 
-    event.preventDefault();
+    
 
-    const formdata = new FormData();
-    formdata.append('haveImg', haveImg);
-    // fd.append('fileRoutes', fileRoutes);
-    const config = {
-      Headers: {
-        'content-type': 'multipart/form-data',
-      },
-    };
-
-    console.log(formdata);
-
-    axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
-    // axios.defaults.withCredentials = true;
-
-    await axios
-      .post('http://localhost:5000/imageCompare', formdata, config, {
-        // withCredentials: true,
+        axios
+        .post('http://localhost:8080/v1/post/postwrite', {
+        postTitle: postTitle,
+        userId : sessionStorage.getItem('userId'),
+        postContent: postContent,
+        postCategory: category,
+        wantImage: wantImg[0],
+        haveImage: haveImg,
+        haveGoodsList: haveIds,
+        wantGoodsList: wantIds,
       })
       .then((res) => {
-        if(res.data.result){
-            axios
-            .post('http://localhost:8080/v1/post/postwrite', {
-            postTitle: postTitle,
-            userId : sessionStorage.getItem('userId'),
-            postContent: postContent,
-            postCategory: category,
-            wantImage: wantImg[0],
-            haveImage: haveImg,
-            haveGoodsList: haveIds,
-            wantGoodsList: wantIds,
-          })
-          .then((res) => {
-            navigate(`/postView/${res.data}`);
-          })
-          .catch((err) => console.log(err));
-        }else{
-          alert("중복된 이미지가 존재합니다.")
-        }
+        navigate(`/postView/${res.data}`);
       })
       .catch((err) => console.log(err));
-
-
-
-
-    
-    
   };
 
   const handleCategory = (e) => {
