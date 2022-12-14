@@ -56,16 +56,16 @@ const Postwrite = () => {
     console.log('originImage', originImg);
 
     axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
-    axios.defaults.withCredentials = true;
 
     await axios
-      .post('http://localhost:5000/captcha', formdata, config, {
-        withCredentials: true,
-      })
+      .post('http://localhost:5000/captcha', formdata, config, {})
       .then((res) => {
         compareCapValue(res.data.result);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setCompareCap(false);
+        console.log(err);
+      });
 
     //   axios.get('http://localhost:8080/v1/tmps')
     // .then((res)=>{setCap(res.data)})
@@ -102,7 +102,7 @@ const Postwrite = () => {
 
     await axios
       .post('http://localhost:5000/imageCompare', formdata, config, {
-        withCredentials: true,
+        // withCredentials: true,
       })
       .then((res) => {
         if(res.data.result){
@@ -214,19 +214,22 @@ const Postwrite = () => {
 
   const generateRandomNumber = () => {
     let str = '';
-    for (let i = 0; i < 5; i++) {
-      str += Math.floor(Math.random() * 10);
-    }
-    setRandomNumber(str);
+
+    str += Math.floor(Math.random() * 4);
+
+    const number = ['13780', '16324', '23780', '45003'];
+    setRandomNumber(number[str]);
+    console.log(str);
   };
 
   const compareCapValue = (e) => {
-    randomNumber = '25300';
-
     if (randomNumber === e) {
       setCompareCap(true);
       console.log('setCompareCap', compareCap);
+    } else {
+      setCompareCap(false);
     }
+    console.log('aaa', compareCap);
   };
   return (
     <Container className="m-5 justify-content-center">
@@ -248,7 +251,7 @@ const Postwrite = () => {
           />
         </Form.Group>
         <Form.Group controlId="formFile" className="mb-3">
-          <Form.Label>문자열 사진 인증</Form.Label>
+          <Form.Label>캡챠 인증</Form.Label>
           <Form.Group className="mb-2">
             <Form.Text>
               제공된 문자열을 하단 사진의 가이드라인에 맞춰 작성하여 사진을
@@ -257,12 +260,12 @@ const Postwrite = () => {
             <Form.Group>
               <Image
                 className="mb-3"
-                src="http://t1.daumcdn.net/friends/prod/editor/dc8b3d02-a15a-4afa-a88b-989cf2a50476.jpg"
+                src="\image\example.jpg"
                 height={'300rem'}
               />
             </Form.Group>
             <Form.Text>오른쪽 숫자를 기입해주세요</Form.Text>
-            <Button className="mx-2">25300</Button>
+            <Button className="mx-2">{randomNumber}</Button>
             {/* <Button className="mx-2">{randomNumber}</Button> */}
           </Form.Group>
           <div>
@@ -281,7 +284,12 @@ const Postwrite = () => {
           />
 
           <Button onClick={submitCaptcha}>인증 사진 등록</Button>
-          {compareCap && <Badge className="m-3">인증되었습니다.</Badge>}
+          {compareCap === true && (
+            <Badge className="m-3">인증되었습니다.</Badge>
+          )}
+          {compareCap === false && (
+            <Badge className="m-3">인증에 실패했습니다.</Badge>
+          )}
         </Form.Group>
 
         <Form.Group controlId="formFile" className="mb-3">
@@ -391,12 +399,12 @@ const Postwrite = () => {
           <Form.Control
             as="textarea"
             placeholder="특이사항을 입력하세요."
-            size="lg"
+            size="0.5g"
             onChange={handleContent}
           />
         </Form.Group>
         <Button variant="primary" type="submit">
-          Submit
+          등록
         </Button>
       </Form>
     </Container>

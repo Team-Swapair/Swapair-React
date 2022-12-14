@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {Col, Row, Container, Image, Badge, Card, Button} from 'react-bootstrap'
 import axios from 'axios';
@@ -6,27 +6,27 @@ import '../assets/card1.css'
 import { Link, useParams } from 'react-router-dom';
 
 function Post() {
-
   const [data, setData] = useState([]);
   const [haveList, setHaveList] = useState([]);
   const [wantList, setWantList] = useState([]);
 
-  let {no} = useParams();
+  let { no } = useParams();
 
-  console.log("id is ",{no});
+  console.log('id is ', { no });
 
   useEffect(()=>{
     const id  = no.no;
     axios.get('http://localhost:8080/v1/post/'+no)
     .then(res =>{
       console.log(res.data)
-        setData(res.data);
-        })
-    .catch(err => console.log(err))
-  },[]);
 
-  console.log("list is", data.haveGoodsList )
-  
+        setData(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  console.log('list is', data.haveGoodsList);
+
   return (
     <Container className='m-5 justify-content-center'>
           <Card border="secondary" className='p-2'>
