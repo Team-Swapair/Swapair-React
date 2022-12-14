@@ -2,12 +2,25 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import {Col, Row, Container, Image, Badge, Card, Button} from 'react-bootstrap'
 import axios from 'axios'; 
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 
 function ChatList() {
 
   const [data, setData] = useState([]);
   let {no} = useParams();
+
+  const move = useNavigate();
+
+  const movetoChat = (e) => {
+    console.log("post is"+e)
+    move('/ChatPage/'+e.randomId, {
+      state: {
+          postId: e.postId
+        }
+      }
+    )
+  };
+
 
   console.log("id is ",{no});
 
@@ -27,16 +40,20 @@ function ChatList() {
                 data && data.map((post) => {
                     return (
                         <Container>
-                        <Row>
-                            <Col>
-                                <Image width={'130rem'} rounded="true" src={post.haveImage}/>
+                        <Row onClick={() => movetoChat(post)} className='p-2 m-2' style={{ width: '40em', border:'3px solid gray', borderRadius: '10px'}}>
+                            <Col md="auto">
+                                <Image width={'70rem'} rounded="true" src={post.haveImage}/>
                             </Col>
                             <Col>
+                            <Container>
+                              <Row>
                                 {post.postTitle}
+                              </Row>
+                              <Row>
+                                {post.message}
+                              </Row>
+                            </Container>   
                             </Col>
-                        </Row>
-                        <Row>
-                            {post.message}
                         </Row>
                         </Container>
                       )

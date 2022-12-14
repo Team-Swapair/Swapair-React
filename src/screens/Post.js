@@ -19,6 +19,7 @@ function Post() {
     const id  = no.no;
     axios.get('http://localhost:8080/v1/post/'+no)
     .then(res =>{
+      console.log(res.data)
         setData(res.data);
         })
     .catch(err => console.log(err))
@@ -28,9 +29,12 @@ function Post() {
   
   return (
     <Container className='m-5 justify-content-center'>
-          <Card border="secondary">
+          <Card border="secondary" className='p-2'>
             <Card.Header>
-              <Container >
+              <Container>
+              { data.isDoubted&&
+                  <h4><Badge className='mb-2' bg="danger">이 게시물은 조작 게시물로 의심됩니다.</Badge></h4>
+              }
                 <h4><Badge className='mb-2' bg="secondary">있어요</Badge></h4>
                 <Row className='justify-content-center mb-2'>
                   <Col xs={8}>
