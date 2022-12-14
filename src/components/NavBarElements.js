@@ -10,6 +10,7 @@ const NavBarElements = () => {
           <Nav.Link href="/">Home</Nav.Link>
           {sessionStorage.getItem('userId')&&(<Nav.Link href="/PostWrite">Post</Nav.Link>)}
           <Nav.Link href="/Profile">Profile</Nav.Link>
+          {sessionStorage.getItem('userId')&&(<Nav.Link href="/Chatlist">Chat</Nav.Link>)}
           <Nav.Link href="/Alert">Alert</Nav.Link>
           <Nav.Link href="/Signup">Signup</Nav.Link>
           <Nav.Link href="/Signin">Signin</Nav.Link>

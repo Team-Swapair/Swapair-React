@@ -12,6 +12,7 @@ import {
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { scryRenderedComponentsWithType } from 'react-dom/test-utils';
 
 const Postwrite = () => {
   const [capchaImg, setCaptchaImg] = useState('');
@@ -29,9 +30,17 @@ const Postwrite = () => {
   let [randomNumber, setRandomNumber] = useState('');
   const navigate = useNavigate();
   let [compareCap, setCompareCap] = useState('');
+  const [fileRoutes, setFileRoutes] = useState([]);
 
   useEffect(() => {
     generateRandomNumber();
+
+    axios.get('http://localhost:8080/v1/post/images')
+    .then(res =>{
+      console.log(res.data)
+        setFileRoutes(res.data);
+        })
+    .catch(err => console.log(err))
   }, []);
 
   const submitCaptcha = async (event) => {
@@ -43,6 +52,7 @@ const Postwrite = () => {
       },
     };
 
+    console.log(formdata);
     console.log('originImage', originImg);
 
     axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
@@ -75,21 +85,53 @@ const Postwrite = () => {
     console.log('wantgoods is', wantGoods);
 
     event.preventDefault();
-    axios
-      .post('http://localhost:8080/v1/post/postwrite', {
-        postTitle: postTitle,
-        userId: sessionStorage.getItem('userId'),
-        postContent: postContent,
-        postCategory: category,
-        wantImage: wantImg[0],
-        haveImage: haveImg,
-        haveGoodsList: haveIds,
-        wantGoodsList: wantIds,
+
+    const formdata = new FormData();
+    formdata.append('haveImg', haveImg);
+    // fd.append('fileRoutes', fileRoutes);
+    const config = {
+      Headers: {
+        'content-type': 'multipart/form-data',
+      },
+    };
+
+    console.log(formdata);
+
+    axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
+    // axios.defaults.withCredentials = true;
+
+    await axios
+      .post('http://localhost:5000/imageCompare', formdata, config, {
+        // withCredentials: true,
       })
       .then((res) => {
-        navigate(`/postView/${res.data}`);
+        if(res.data.result){
+            axios
+            .post('http://localhost:8080/v1/post/postwrite', {
+            postTitle: postTitle,
+            userId : sessionStorage.getItem('userId'),
+            postContent: postContent,
+            postCategory: category,
+            wantImage: wantImg[0],
+            haveImage: haveImg,
+            haveGoodsList: haveIds,
+            wantGoodsList: wantIds,
+          })
+          .then((res) => {
+            navigate(`/postView/${res.data}`);
+          })
+          .catch((err) => console.log(err));
+        }else{
+          alert("중복된 이미지가 존재합니다.")
+        }
       })
       .catch((err) => console.log(err));
+
+
+
+
+    
+    
   };
 
   const handleCategory = (e) => {
