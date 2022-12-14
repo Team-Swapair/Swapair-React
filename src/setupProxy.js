@@ -12,4 +12,11 @@ module.exports = (app) => {
     "/ws-stomp",
     createProxyMiddleware({ target: "http://localhost:8080", ws: true })
   );
+  app.use(
+    "*",
+    createProxyMiddleware({
+      target: "http://localhost:5000",
+      changeOrigin: true,
+    })
+  );
 };

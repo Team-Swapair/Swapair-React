@@ -12,6 +12,7 @@ import {
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { scryRenderedComponentsWithType } from 'react-dom/test-utils';
 
 const Postwrite = () => {
   const [capchaImg, setCaptchaImg] = useState('');
@@ -51,6 +52,7 @@ const Postwrite = () => {
       },
     };
 
+    console.log(formdata);
     console.log('originImage', originImg);
 
     axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
@@ -85,16 +87,18 @@ const Postwrite = () => {
     event.preventDefault();
 
     const formdata = new FormData();
-    formdata.append('haveImage', haveImg);
-    formdata.append('fileRoutes', fileRoutes);
+    formdata.append('haveImg', haveImg);
+    // fd.append('fileRoutes', fileRoutes);
     const config = {
       Headers: {
         'content-type': 'multipart/form-data',
       },
     };
 
+    console.log(formdata);
+
     axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
-    axios.defaults.withCredentials = true;
+    // axios.defaults.withCredentials = true;
 
     await axios
       .post('http://localhost:5000/imageCompare', formdata, config, {
