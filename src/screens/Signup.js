@@ -28,18 +28,26 @@ function Signup() {
   const onSubmitHandler = async (event) => {
     event.preventDefault();
 
-    if (!email || !password || !phoneNumber) {
+    if (!email || !password) {
       alert('빈칸이 존재합니다. 모든 항목을 채워주세요');
+    } else if (!phoneNumber) {
+      alert('휴대폰 인증을 진행해주세요.');
     } else {
-      axios
+      await axios
         .get(`http://localhost:8080/v1/user/duplicate/email/${email}`)
-        .catch(() => (duplicateEmail = true));
+        .then((res) => {
+          if (res.data === true) duplicatePhoneNumber = true;
+        });
 
       await axios
         .get(
           `http://localhost:8080/v1/user/duplicate/phoneNumber/${phoneNumber}`
         )
-        .catch(() => (duplicatePhoneNumber = true));
+        .then((res) => {
+          console.log('phoneNumber', res);
+
+          if (res.data === true) duplicatePhoneNumber = true;
+        });
     }
 
     if (duplicateEmail === true)
@@ -49,15 +57,6 @@ function Signup() {
       alert('이미 존재하는 핸드폰 번호입니다. 다시 입력해주세요');
 
     if (duplicateEmail === false && duplicatePhoneNumber === false) {
-      await axios.post('http://localhost:8080/v1/user', {
-        email: email,
-        password: password,
-        phoneNumber: phoneNumber,
-      });
-      navigate('/Signin');
-    }
-
-    if (duplicateEmail === false) {
       await axios.post('http://localhost:8080/v1/user', {
         email: email,
         password: password,
